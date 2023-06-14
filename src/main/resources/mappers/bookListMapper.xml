@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.li.javasenior_springboot.mapper.bookListMapper">
+
+    <select id="getAllBook"  resultType="bookList">
+        select * from bookList;
+    </select>
+
+    <select id="getBooks" resultType="bookList">
+        select * from bookList
+            where 1 = 1
+        <if test="bookId != '' and bookId != null">
+            and bookId = #{bookId}
+        </if>
+        <if test="bookName != '' and bookName != null">
+            and bookName like concat ('%', #{bookName} ,'%')
+        </if>
+        <if test="bookAuthor != '' and bookAuthor != null">
+            and bookAuthor like concat ('%', #{bookAuthor} ,'%')
+        </if>
+        ORDER BY bookId
+    </select>
+
+    <insert id="addBook" parameterType="bookList">
+        insert into bookList(bookId,bookName,
+        <if test="bookProfile != '' and bookProfile != null">
+            bookAuthor,
+        </if>
+        bookNumber,
+        <if test="bookProfile != '' and bookProfile != null">
+            bookProfile,
+        </if>
+        insertDate
+        )
+        values(#{bookId},#{bookName},
+        <if test="bookProfile != '' and bookProfile != null">
+            #{bookAuthor},
+        </if>
+        #{bookNumber},
+        <if test="bookProfile != '' and bookProfile != null">
+            #{bookProfile},
+        </if>
+        #{insertDate}
+        )
+
+    </insert>
+
+    <delete id="deleteBook" parameterType="int">
+        delete from bookList where bookId =#{bookId}
+    </delete>
+
+    <update id="changeBook" parameterType="bookList">
+        update bookList
+        set  bookName = #{bookName} , bookAuthor = #{bookAuthor},
+             bookNumber = #{bookNumber}, bookProfile = #{bookProfile},
+            insertDate = #{insertDate}
+        where bookId = #{bookId};
+    </update>
+
+
+
+
+</mapper>
